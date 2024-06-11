@@ -1,0 +1,31 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache build environment
+        id: cache-build
+        uses: actions/cache@v4
+        with:
+          path: build
+          key: ${{ runner.os }}-build
+      - name: Cleanup environment
+        run: |
+          sudo rm -rf $(brew --prefix)
+          curl --silent --location --retry 3 "https://github.com/Kitware/CMake/releases/download/v3.29.5/cmake-3.29.5-macos-universal.dmg" --output ~/Downloads/cmake-macos.dmg
+          hdiutil attach -quiet -mountpoint /Volumes/cmake-macos ~/Downloads/cmake-macos.dmg
+          cp -R /Volumes/cmake-macos/CMake.app /Applications/
+          hdiutil detach /Volumes/cmake-macos
+          sudo "/Applications/CMake.app/Contents/bin/cmake-gui" --install=/usr/local/bin
+      - name: Configure build
+        run: cmake . -DCMAKE_INSTALL_PREFIX=$HOME/php
+      - name: Build PHP
+        run: make
