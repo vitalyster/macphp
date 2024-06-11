@@ -1,0 +1,23 @@
+name: CI
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cache dependencies
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: build/deps
+          key: ${{ runner.os }}-deps
+      - name: Configure build
+        run: cmake . -DCMAKE_INSTALL_PREFIX=dist
+      - name: Build PHP
+        run: make
