@@ -51,14 +51,22 @@ ExternalProject_Add(ext_sodium
   INSTALL_COMMAND make install
 )
 
+ExternalProject_Add(ext_onigiruma
+  URL "https://github.com/kkos/oniguruma/releases/download/v6.9.9/onig-6.9.9.tar.gz"
+  URL_HASH SHA256=60162bd3b9fc6f4886d4c7a07925ffd374167732f55dce8c491bfd9cd818a6cf
+  PREFIX build/deps/oniguruma
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+)
+
 ExternalProject_Add(php81
   URL "https://www.php.net/distributions/php-8.1.29.tar.gz"
   URL_HASH SHA256=8b2609bf1d3173aa38269a9af21532c65f730aadd3051f9aae011eea9e246de5
   PREFIX build/deps/php81
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND ./configure "CFLAGS=-I${CMAKE_INSTALL_PREFIX}/include -I${MACOS_SDK_PREFIX}/usr/include ${CMAKE_C_FLAGS}" "LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/lib -liconv ${CMAKE_EXE_LINKER_FLAGS}" "SQLITE_CFLAGS=''" "SQLITE_LIBS=-lsqlite3" "LIBXML_CFLAGS=-I${CMAKE_INSTALL_PREFIX}/libxml2" "LIBXML_LIBS=-liconv -lxml2" "OPENSSL_CFLAGS=''" "OPENSSL_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lcrypto -lssl" "ZLIB_CFLAGS=''" "ZLIB_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lz" "CURL_CFLAGS=''" "CURL_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lcurl" "LIBSODIUM_CFLAGS=''" "LIBSODIUM_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lsodium -lpthread" --prefix=${CMAKE_INSTALL_PREFIX} --with-openssl --enable-bcmath --with-zlib --with-curl --with-sodium
+  CONFIGURE_COMMAND ./configure "CFLAGS=-I${CMAKE_INSTALL_PREFIX}/include -I${MACOS_SDK_PREFIX}/usr/include ${CMAKE_C_FLAGS}" "LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/lib -liconv ${CMAKE_EXE_LINKER_FLAGS}" "SQLITE_CFLAGS=''" "SQLITE_LIBS=-lsqlite3" "LIBXML_CFLAGS=-I${CMAKE_INSTALL_PREFIX}/libxml2" "LIBXML_LIBS=-liconv -lxml2" "OPENSSL_CFLAGS=''" "OPENSSL_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lcrypto -lssl" "ZLIB_CFLAGS=''" "ZLIB_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lz" "CURL_CFLAGS=''" "CURL_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lcurl" "LIBSODIUM_CFLAGS=''" "LIBSODIUM_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lsodium -lpthread" "ONIG_CFLAGS=''" "ONIG_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lonig" --prefix=${CMAKE_INSTALL_PREFIX} --with-openssl --enable-bcmath --enable-mbstring --with-zlib --with-curl --with-sodium
   BUILD_COMMAND make
   INSTALL_COMMAND make install
-  DEPENDS ext_openssl ext_sodium ext_libxml2 ext_sqlite3
+  DEPENDS ext_openssl ext_sodium ext_libxml2 ext_sqlite3 ext_onigiruma
 )
