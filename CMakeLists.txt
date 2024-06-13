@@ -41,8 +41,8 @@ ExternalProject_Add(ext_sqlite3
 )
 
 ExternalProject_Add(ext_sodium
-  URL "https://download.libsodium.org/libsodium/releases/libsodium-1.0.20-stable.tar.gz"
-  URL_HASH SHA256=192a29c7d768909bff1e13a838b696f4582f0bcb4a6b2fc4150b8acc5341433f
+  URL "https://github.com/jedisct1/libsodium/releases/download/1.0.20-RELEASE/libsodium-1.0.20.tar.gz"
+  URL_HASH SHA256=ebb65ef6ca439333c2bb41a0c1990587288da07f6c7fd07cb3a18cc18d30ce19
   PREFIX build/deps/libsodium
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   BUILD_IN_SOURCE 1
