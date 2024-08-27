@@ -48,3 +48,38 @@ ExternalProject_Add(php81
   INSTALL_COMMAND make install
   DEPENDS ext_ssl ext_sodium ext_onigiruma
 )
+
+ExternalProject_Add(m4
+  URL "https://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz"
+  URL_HASH SHA256=3be4a26d825ffdfda52a56fc43246456989a3630093cced3fbddf4771ee58a70
+  PREFIX build/deps/m4
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  BUILD_IN_SOURCE 1
+  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+  BUILD_COMMAND make
+  INSTALL_COMMAND make install
+)
+
+ExternalProject_Add(autoconf
+  URL "https://ftp.gnu.org/gnu/autoconf/autoconf-2.72.tar.gz"
+  URL_HASH SHA256=afb181a76e1ee72832f6581c0eddf8df032b83e2e0239ef79ebedc4467d92d6e
+  PREFIX build/deps/autoconf
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  BUILD_IN_SOURCE 1
+  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX} M4=${CMAKE_INSTALL_PREFIX}/bin/m4
+  BUILD_COMMAND make
+  INSTALL_COMMAND make install
+  DEPENDS m4
+)
+
+ExternalProject_Add(xdebug
+  URL "https://xdebug.org/files/xdebug-3.3.2.tgz"
+  URL_HASH SHA256=15545b8311bedb5e7df08fd90d6653d9bf33629791e8119e70350475df932c55
+  PREFIX build/deps/xdebug/xdebug-3.3.2
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  BUILD_IN_SOURCE 1
+  CONFIGURE_COMMAND cd xdebug-3.3.2 && PHP_AUTOCONF=${CMAKE_INSTALL_PREFIX}/bin/autoconf PHP_AUTOHEADER=${CMAKE_INSTALL_PREFIX}/bin/autoheader phpize && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+  BUILD_COMMAND cd xdebug-3.3.2 && make
+  INSTALL_COMMAND cd xdebug-3.3.2 && make install
+  DEPENDS php81 autoconf
+)
