@@ -78,7 +78,7 @@ ExternalProject_Add(xdebug
   PREFIX build/deps/xdebug/xdebug-3.3.2
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND cd xdebug-3.3.2 && PHP_AUTOCONF=${CMAKE_INSTALL_PREFIX}/bin/autoconf PHP_AUTOHEADER=${CMAKE_INSTALL_PREFIX}/bin/autoheader phpize && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND cd xdebug-3.3.2 && PHP_AUTOCONF=${CMAKE_INSTALL_PREFIX}/bin/autoconf PHP_AUTOHEADER=${CMAKE_INSTALL_PREFIX}/bin/autoheader ${CMAKE_INSTALL_PREFIX}/bin/phpize && ./configure --prefix=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND cd xdebug-3.3.2 && make
   INSTALL_COMMAND cd xdebug-3.3.2 && make install
   DEPENDS php81 autoconf
