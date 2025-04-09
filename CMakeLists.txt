@@ -37,16 +37,34 @@ ExternalProject_Add(ext_onigiruma
   CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
 )
 
+ExternalProject_Add(ext_libpng
+  URL "https://sourceforge.net/projects/libpng/files/libpng16/1.6.47/libpng-1.6.47.tar.gz/download"
+  PREFIX build/deps/libpng
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  BUILD_IN_SOURCE 1
+  CONFIGURE_COMMAND ./configure --prefix=${CMAKE_INSTALL_PREFIX}
+  BUILD_COMMAND make
+  INSTALL_COMMAND make install
+)
+
+ExternalProject_Add(ext_libzip
+  URL "https://github.com/nih-at/libzip/releases/download/v1.11.3/libzip-1.11.3.tar.gz"
+  PREFIX build/deps/libzip
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+)
+
 ExternalProject_Add(php81
   URL "https://www.php.net/distributions/php-8.1.29.tar.gz"
   URL_HASH SHA256=8b2609bf1d3173aa38269a9af21532c65f730aadd3051f9aae011eea9e246de5
   PREFIX build/deps/php81
   INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
   BUILD_IN_SOURCE 1
-  CONFIGURE_COMMAND ./configure "CFLAGS=-I${CMAKE_INSTALL_PREFIX}/include -I${MACOS_SDK_PREFIX}/usr/include ${CMAKE_C_FLAGS}" "LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/lib -liconv ${CMAKE_EXE_LINKER_FLAGS}" "SQLITE_CFLAGS=''" "SQLITE_LIBS=-lsqlite3" "LIBXML_CFLAGS=''" "LIBXML_LIBS=-liconv -lxml2" "OPENSSL_CFLAGS=''" "OPENSSL_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -ltls -lcrypto -lssl" "ZLIB_CFLAGS=''" "ZLIB_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lz" "CURL_CFLAGS=''" "CURL_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lcurl" "LIBSODIUM_CFLAGS=''" "LIBSODIUM_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lsodium -lpthread" "ONIG_CFLAGS=''" "ONIG_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lonig" --prefix=${CMAKE_INSTALL_PREFIX} --with-openssl --enable-bcmath=shared --enable-mbstring=shared --with-zlib --with-curl --with-sodium
+  CONFIGURE_COMMAND ./configure "CFLAGS=-I${CMAKE_INSTALL_PREFIX}/include -I${MACOS_SDK_PREFIX}/usr/include ${CMAKE_C_FLAGS}" "LDFLAGS=-L${CMAKE_INSTALL_PREFIX}/lib -liconv ${CMAKE_EXE_LINKER_FLAGS}" "SQLITE_CFLAGS=''" "SQLITE_LIBS=-lsqlite3" "LIBXML_CFLAGS=''" "LIBXML_LIBS=-liconv -lxml2" "OPENSSL_CFLAGS=''" "OPENSSL_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -ltls -lcrypto -lssl" "ZLIB_CFLAGS=''" "ZLIB_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lz" "CURL_CFLAGS=''" "CURL_LIBS=-L${MACOS_SDK_PREFIX}/usr/lib -lcurl" "LIBSODIUM_CFLAGS=''" "LIBSODIUM_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lsodium -lpthread" "ONIG_CFLAGS=''" "ONIG_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lonig" "PNG_CFLAGS=''" "PNG_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lpng" "LIBZIP_CFLAGS=''" "LIBZIP_LIBS=-L${CMAKE_INSTALL_PREFIX}/lib -lzip" --prefix=${CMAKE_INSTALL_PREFIX} --with-openssl --enable-bcmath=shared --enable-mbstring=shared --with-zlib --with-curl --with-sodium --enable-gd --with-zip
   BUILD_COMMAND make
   INSTALL_COMMAND make install
-  DEPENDS ext_ssl ext_sodium ext_onigiruma
+  DEPENDS ext_ssl ext_sodium ext_onigiruma ext_libpng ext_libzip
 )
 
 ExternalProject_Add(m4
